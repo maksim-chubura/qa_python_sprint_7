@@ -1,28 +1,14 @@
 import pytest
 import allure
-import random
-import string
 from api.courier_api import CourierApi
 
 courier_api = CourierApi()
 
 class TestLoginCourier:
 
-    @pytest.fixture()
-    def create_courier(self):
-        random_string = ''.join(random.choices(string.ascii_lowercase, k=10))
-        login = f"login_{random_string}"
-        password = f"pass_{random_string}"
-        first_name = f"name_{random_string}"
-        create_response = courier_api.create_courier(login, password, first_name)
-        assert create_response.status_code == 201
-        yield login, password
-        delete_response = courier_api.delete_courier(login, password)
-        assert delete_response.status_code == 200
-
     @allure.title("Успешная авторизация курьера")
     def test_can_login_courier(self, create_courier):
-        login, password = create_courier
+        login, password, first_name = create_courier
         login_response = courier_api.login_courier(login, password)
         assert login_response.status_code == 200
         assert "id" in login_response.json()
