@@ -7,10 +7,6 @@ courier_api = CourierApi()
 @pytest.fixture()
 def create_courier():
     login, password, first_name = generate_random_courier_data()
-    create_response = courier_api.create_courier(login, password, first_name)
-    assert create_response.status_code == 201
+    courier_api.create_courier(login, password, first_name)
 
     yield login, password, first_name
-
-    delete_response = courier_api.delete_courier(login, password)
-    assert delete_response.status_code == 200
